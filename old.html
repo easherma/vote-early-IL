@@ -1,0 +1,60 @@
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+<script type="text/javascript" src="early_voting.js"></script>
+
+<div id='map' style='position:absolute; top:0; bottom:0; width:100%;'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiZWFzaGVybWEiLCJhIjoiY2oxcW51Nzk2MDBkbTJxcGUxdm85bW5xayJ9.7mL0wQ7cjifWwt5DrXMuJA';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/light-v9'
+});
+
+
+map.on('load', function () {
+
+  map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
+      if (error) throw error;
+      map.addImage('flag', image);
+
+  map.addSource('polling', {
+      type: 'geojson',
+      data: 'early_voting.geojson'
+  });
+
+  map.addLayer({
+    id: 'locations',
+    type: 'symbol',
+    // Add a GeoJSON source containing place coordinates and information.
+    source: {
+      type: 'geojson',
+      data: PollingPlaces
+    },
+    layout: {
+      'icon-image': 'town-hall-15',
+      'icon-allow-overlap': true,
+    }
+  });
+
+  // map.addLayer({
+  //     "id": "park-boundary",
+  //     "type": "symbol",
+  //     "source": "polling",
+  //     "layout": {
+  //       "icon-image": "flag",
+  //       "icon-size": 0.05
+  //     }
+  //   });
+  //   map.addLayer({
+  //   id: 'polls',
+  //   type: 'circle',
+  //   source: {
+  //     type: 'vector',
+  //     url: 'mapbox://easherma.cjehyupm43du72wo1vfl9sfew-17kuj' // Your Mapbox tileset Map ID
+  //   },
+  //   'source-layer': 'early-voting-locations' // name of tilesets
+  // });
+  });
+
+});
+</script>
