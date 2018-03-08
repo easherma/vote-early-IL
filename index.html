@@ -333,10 +333,10 @@
       color: #fff;
       margin: 0;
       display: block;
-      padding: 10px;
+      padding: 5px;
       border-radius: 3px 3px 0 0;
       font-weight: 700;
-      margin-top: -15px;
+      margin-top: -5px;
     }
 
     .mapboxgl-popup-content h4 {
@@ -632,7 +632,7 @@
           closeOnClick: false
         })
         .setLngLat(currentFeature.geometry.coordinates)
-        .setHTML('<h3>Early Voting Location</h3>' +
+        .setHTML('<h3>Vote Early Here:</h3>' +
           '<h4>' + currentFeature.properties.Address + '</h4>')
         .addTo(map);
     }
