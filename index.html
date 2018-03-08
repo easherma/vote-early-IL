@@ -178,7 +178,7 @@
         /* Position the content inside the overlay */
         .overlay-content {
             position: relative;
-            /* top: 5%; /* 25% from the top */ */
+            /* top: 5%; /* 25% from the top */ 
             width: 100%; /* 100% width */
             text-align: left; /* Centered text/links */
             margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
@@ -373,14 +373,17 @@
         </div>
 
         <a href="#">Why does this matter?</a>
-        <div class = "video-container"><iframe width="560" height="315" src="https://www.youtube.com/embed/hArkyCqBRrI?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div class="video-container" id="video">
+          <iframe width="560" height="315" src="http://www.youtube.com/embed/T39hYJAwR40?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
         <a  href="#" style="background: url(check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
             width: 46px;
-            height: 46px;"  onclick="toggle()"
+            height: 46px;"  onclick="toggle();toggleVideo();"
         ></a>
 
       </div>
+
+
 
 
     </div>
@@ -660,6 +663,16 @@ x.setAttribute('data-value', "0");
     }
 }
     </script>
+    <script>
+function toggleVideo(state) {
+    // if state == 'hide', hide. Else: show video
+    var div = document.getElementById("video");
+    var iframe = div.getElementsByTagName("iframe")[0].contentWindow;
+    div.style.display = state == 'hide' ? 'none' : '';
+    func = state == 'hide' ? 'pauseVideo' : 'playVideo';
+    iframe.postMessage('{"event":"command","func":"' + func + '","args":""}', '*');
+}
+</script>
 
   </body>
 </html>
