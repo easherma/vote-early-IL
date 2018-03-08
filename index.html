@@ -1,550 +1,600 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108443162-2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'UA-108443162-2');
-</script>
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108443162-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-      <meta charset='utf-8' />
-      <title>Vote Early Illinois!</title>
-      <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-      <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
-      <!-- Mapbox GL JS -->
-      <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
-      <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
-      <!-- Geocoder plugin -->
-      <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
-      <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' />
-      <!-- Turf.js plugin -->
-      <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-      <script type="text/javascript" src="early_voting.js"></script>
-      <style>
-      .video-container {
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108443162-2');
+  </script>
+
+  <meta charset='utf-8' />
+  <title>Vote Early Illinois!</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
+  <!-- Mapbox GL JS -->
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+  <!-- Geocoder plugin -->
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' />
+  <!-- Turf.js plugin -->
+  <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+  <script type="text/javascript" src="early_voting.js"></script>
+  <style>
+    .video-container {
       position: relative;
       padding-bottom: 56.25%;
-      padding-top: 30px; height: 0; overflow: hidden;
-      }
+      padding-top: 30px;
+      height: 0;
+      overflow: hidden;
+    }
 
-      .video-container iframe,
-      .video-container object,
-      .video-container embed {
+    .video-container iframe,
+    .video-container object,
+    .video-container embed {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+    }
+
+    body {
+      color: #404040;
+      font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    .sidebar {
+      position: absolute;
+      width: 33.3333%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      border-right: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .pad2 {
+      padding: 20px;
+    }
+
+    .map {
+      position: absolute;
+      left: 33.3333%;
+      width: 66.6666%;
+      top: 0;
+      bottom: 0;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 0;
+      font-weight: 400;
+      line-height: 20px;
+      padding: 20px 2px;
+    }
+
+    a {
+      color: #404040;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #101010;
+    }
+
+    .heading {
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      min-height: 60px;
+      line-height: 60px;
+      padding: 0 10px;
+      background-color: #342c5f;
+      color: #fff;
+    }
+
+    .listings {
+      height: 100%;
+      overflow: auto;
+      padding-bottom: 60px;
+    }
+
+    .listings .item {
+      display: block;
+      border-bottom: 1px solid #eee;
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    .listings .item:last-child {
+      border-bottom: none;
+    }
+
+    .listings .item .title {
+      display: block;
+      color: #342c5f;
+      font-weight: 700;
+    }
+
+    .listings .item .title small {
+      font-weight: 400;
+    }
+
+    .listings .item.active .title,
+    .listings .item .title:hover {
+      color: #f2d7ca;
+    }
+
+    .listings .item.active {
+      background-color: #f8f8f8;
+    }
+
+    ::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+      border-left: 0;
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    ::-webkit-scrollbar-track {
+      background: none;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #00853e;
+      border-radius: 0;
+    }
+
+    .marker {
+      border: none;
+      cursor: pointer;
+      height: 56px;
+      width: 56px;
+      background-image: url(marker.svg);
+      background-repeat: no-repeat;
+      background-color: rgba(0, 0, 0, 0);
+    }
+
+    .clearfix {
+      display: block;
+    }
+
+    .clearfix:after {
+      content: '.';
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+    /* The Overlay (background) */
+
+    .overlay {
+      /* Height & width depends on how you want to reveal the overlay (see JS below) */
+      height: 100%;
+      width: 66%;
+      position: fixed;
+      /* Stay in place */
+      z-index: 3;
+      /* Sit on top */
+      right: 0;
+      top: 0;
+      background-color: #404040;
+      /* Black fallback color */
+      background-color: #404040c9;
+      /* Black w/opacity */
+      overflow-x: hidden;
+      /* Disable horizontal scroll */
+      transition: 0.5s;
+      display: block;
+      /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+    }
+    /* Position the content inside the overlay */
+
+    .overlay-content {
+      position: relative;
+      /* top: 5%; /* 25% from the top */
+      width: 100%;
+      /* 100% width */
+      text-align: left;
+      /* Centered text/links */
+      margin-top: 30px;
+      /* 30px top margin to avoid conflict with the close button on smaller screens */
+      margin-left: 10px;
+    }
+    /* The navigation links inside the overlay */
+
+    .overlay a {
+      padding: 8px;
+      text-decoration: none;
+      font-size: 22px;
+      color: #fff;
+      display: block;
+      /* Display block instead of inline */
+      transition: 0.3s;
+      /* Transition effects on hover (color) */
+    }
+    /* When you mouse over the navigation links, change their color */
+
+    .overlay a:hover,
+    .overlay a:focus {
+      color: #f1f1f1;
+    }
+    /* Position the close button (top right corner) */
+
+    .overlay .closebtn {
+      position: absolute;
+      top: 20px;
+      right: 45px;
+      font-size: 60px;
+    }
+    /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+
+    @media screen and (max-height: 450px) {
+      .overlay a {
+        font-size: 20px
       }
-        body {
-          color:#404040;
-          font:400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-          margin:0;
-          padding:0;
-          -webkit-font-smoothing:antialiased;
-        }
+      .overlay .closebtn {
+        font-size: 40px;
+        top: 15px;
+        right: 35px;
+      }
+    }
 
-        * {
-          -webkit-box-sizing:border-box;
-          -moz-box-sizing:border-box;
-          box-sizing:border-box;
-        }
+    #menu {
+      background: #fff;
+      position: absolute;
+      z-index: 3;
+      top: 15px;
+      right: 15px;
+      border-radius: 20px;
+      width: 36px;
+      height: 36px;
+      /* border: 1px solid rgba(0,0,0,0.4); */
+      font-family: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    }
 
-        .sidebar {
-          position:absolute;
-          width:33.3333%;
-          height:100%;
-          top:0;left:0;
-          overflow:hidden;
-          border-right:1px solid rgba(0,0,0,0.25);
-        }
-        .pad2 {
-          padding:20px;
-        }
+    #menu a {
+      font-size: 13px;
+      color: white;
+      display: block;
+      margin: 0;
+      padding: 0;
+      padding: 10px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
 
-        .map {
-          position:absolute;
-          left:33.3333%;
-          width:66.6666%;
-          top:0;bottom:0;
-        }
+    #menu a:last-child {
+      border: none;
+    }
 
-        h1 {
-          font-size:22px;
-          margin:0;
-          font-weight:400;
-          line-height: 20px;
-          padding: 20px 2px;
-        }
+    #menu a:hover {
+      background-color: #f8f8f8;
+      color: #404040;
+    }
 
-        a {
-          color:#404040;
-          text-decoration:none;
-        }
+    #menu a.active {
+      background-color: #3887be;
+      color: #ffffff;
+    }
 
-        a:hover {
-          color:#101010;
-        }
+    #menu a.active:hover {
+      background: #3074a4;
+    }
 
-        .heading {
-          background:#fff;
-          border-bottom:1px solid #eee;
-          min-height:60px;
-          line-height:60px;
-          padding:0 10px;
-          background-color: #342c5f;
-          color: #fff;
-        }
+    @media screen and (max-width: 800px) {
+      #menu {
+        top: 10%;
+      }
+      #myNav {
+        width: 100%;
+      }
+    }
+    /* Marker tweaks */
 
-        .listings {
-          height:100%;
-          overflow:auto;
-          padding-bottom:60px;
-        }
+    .mapboxgl-popup {
+      padding-bottom: 50px;
+    }
 
-        .listings .item {
-          display:block;
-          border-bottom:1px solid #eee;
-          padding:10px;
-          text-decoration:none;
-        }
+    .mapboxgl-popup-close-button {
+      display: none;
+    }
 
-        .listings .item:last-child { border-bottom:none; }
-        .listings .item .title {
-          display:block;
-          color:#342c5f;
-          font-weight:700;
-        }
+    .mapboxgl-popup-content {
+      font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+      padding: 0;
+      width: 180px;
+    }
 
-        .listings .item .title small { font-weight:400; }
-        .listings .item.active .title,
-        .listings .item .title:hover { color:#f2d7ca; }
-        .listings .item.active {
-          background-color:#f8f8f8;
-        }
-        ::-webkit-scrollbar {
-          width:3px;
-          height:3px;
-          border-left:0;
-          background:rgba(0,0,0,0.1);
-        }
-        ::-webkit-scrollbar-track {
-          background:none;
-        }
-        ::-webkit-scrollbar-thumb {
-          background:#00853e;
-          border-radius:0;
-        }
+    .mapboxgl-popup-content-wrapper {
+      padding: 1%;
+    }
 
-        .marker {
-          border: none;
-          cursor: pointer;
-          height: 56px;
-          width: 56px;
-          background-image: url(marker.svg);
-          background-repeat: no-repeat;
-          background-color: rgba(0, 0, 0, 0);
-        }
+    .mapboxgl-popup-content h3 {
+      background: #342c5f;
+      color: #fff;
+      margin: 0;
+      display: block;
+      padding: 10px;
+      border-radius: 3px 3px 0 0;
+      font-weight: 700;
+      margin-top: -15px;
+    }
 
-        .clearfix { display:block; }
-        .clearfix:after {
-          content:'.';
-          display:block;
-          height:0;
-          clear:both;
-          visibility:hidden;
-        }
+    .mapboxgl-popup-content h4 {
+      margin: 0;
+      display: block;
+      padding: 10px 10px 10px 10px;
+      font-weight: 400;
+    }
 
-        /* The Overlay (background) */
-        .overlay {
-            /* Height & width depends on how you want to reveal the overlay (see JS below) */
-            height: 100%;
-            width: 66%;
-            position: fixed; /* Stay in place */
-            z-index: 3; /* Sit on top */
-            right: 0;
-            top: 0;
-            background-color: #404040; /* Black fallback color */
-            background-color: #404040c9; /* Black w/opacity */
-            overflow-x: hidden; /* Disable horizontal scroll */
-            transition: 0.5s;
-            display: block; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
-        }
+    .mapboxgl-popup-content div {
+      padding: 10px;
+    }
 
-        /* Position the content inside the overlay */
-        .overlay-content {
-            position: relative;
-            /* top: 5%; /* 25% from the top */ 
-            width: 100%; /* 100% width */
-            text-align: left; /* Centered text/links */
-            margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
-            margin-left: 10px;
-        }
+    .mapboxgl-container .leaflet-marker-icon {
+      cursor: pointer;
+    }
 
-        /* The navigation links inside the overlay */
-        .overlay a {
-            padding: 8px;
-            text-decoration: none;
-            font-size: 22px;
-            color: #fff;
-            display: block; /* Display block instead of inline */
-            transition: 0.3s; /* Transition effects on hover (color) */
-        }
+    .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+      margin-top: 15px;
+    }
 
-        /* When you mouse over the navigation links, change their color */
-        .overlay a:hover, .overlay a:focus {
-            color: #f1f1f1;
-        }
+    .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+      border-bottom-color: #342c5f;
+    }
 
-        /* Position the close button (top right corner) */
-        .overlay .closebtn {
-            position: absolute;
-            top: 20px;
-            right: 45px;
-            font-size: 60px;
-        }
+    .mapboxgl-ctrl-geocoder {
+      border: 2px solid #00853e;
+      border-radius: 0;
+      position: relative;
+      top: 0;
+      width: 800px;
+      margin-top: 0;
+      border: 0;
+    }
 
-        /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
-        @media screen and (max-height: 450px) {
-            .overlay a {font-size: 20px}
-            .overlay .closebtn {
-                font-size: 40px;
-                top: 15px;
-                right: 35px;
-            }
-        }
+    .mapboxgl-ctrl-geocoder > div {
+      min-width: 100%;
+      margin-left: 0;
+    }
+  </style>
+</head>
 
+<body>
+  <div class='sidebar'>
 
-
-
-
-        #menu {
-    background: #fff;
-    position: absolute;
-    z-index: 3;
-    top: 15px;
-    right: 15px;
-    border-radius: 20px;
-    width: 46px;
-    height: 46px;
-    /* border: 1px solid rgba(0,0,0,0.4); */
-    font-family:  400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-}
-
-#menu a {
-    font-size: 13px;
-    color: white;
-    display: block;
-    margin: 0;
-    padding: 0;
-    padding: 10px;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(0,0,0,0.25);
-    text-align: center;
-}
-
-#menu a:last-child {
-    border: none;
-}
-
-#menu a:hover {
-    background-color: #f8f8f8;
-    color: #404040;
-}
-
-#menu a.active {
-    background-color: #3887be;
-    color: #ffffff;
-}
-
-#menu a.active:hover {
-    background: #3074a4;
-}
-
-@media screen and (max-width: 800px) {
-  #menu
-  {
-  top: 10%;
-  }
-  #myNav  {
-    width: 100%;
-  }
-}
-
-
-        /* Marker tweaks */
-        .mapboxgl-popup {
-          padding-bottom: 50px;
-        }
-
-        .mapboxgl-popup-close-button {
-          display:none;
-        }
-        .mapboxgl-popup-content {
-          font:400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-          padding:0;
-          width:180px;
-        }
-        .mapboxgl-popup-content-wrapper {
-          padding:1%;
-        }
-        .mapboxgl-popup-content h3 {
-          background:#342c5f;
-          color:#fff;
-          margin:0;
-          display:block;
-          padding:10px;
-          border-radius:3px 3px 0 0;
-          font-weight:700;
-          margin-top:-15px;
-        }
-
-        .mapboxgl-popup-content h4 {
-          margin:0;
-          display:block;
-          padding: 10px 10px 10px 10px;
-          font-weight:400;
-        }
-
-        .mapboxgl-popup-content div {
-          padding:10px;
-        }
-
-        .mapboxgl-container .leaflet-marker-icon {
-          cursor:pointer;
-        }
-
-        .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
-          margin-top: 15px;
-        }
-
-        .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-          border-bottom-color: #342c5f;
-        }
-
-        .mapboxgl-ctrl-geocoder {
-          border: 2px solid #00853e;
-          border-radius: 0;
-          position: relative;
-          top: 0;
-          width: 800px;
-          margin-top: 0;
-          border: 0;
-        }
-
-        .mapboxgl-ctrl-geocoder > div {
-          min-width:100%;
-          margin-left:0;
-        }
-      </style>
-  </head>
-
-  <body>
-    <div class='sidebar'>
-
-      <div class='heading'>
-        <h1>Early Voting Locations</h1>
-      </div>
+    <div class='heading'>
+      <h1>Early Voting Locations</h1>
+    </div>
     <div id='listings' class='listings'></div>
 
-    </div>
+  </div>
 
-    <!-- The overlay -->
-    <div id="myNav" class="overlay" data-value="1">
+  <!-- The overlay -->
+  <div id="myNav" class="overlay" data-value="1">
 
-      <!-- Button to close the overlay navigation -->
-      <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggle()">&times;</a> -->
+    <!-- Button to close the overlay navigation -->
+    <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggle()">&times;</a> -->
 
-      <!-- Overlay content -->
-      <div class="overlay-content">
-        <a style="margin:auto;"><h3 style="margin-top: 0px;margin-bottom: 0px;">Let's Get to the Polls!</h3></a>
-        <a href='#' >How to use:</a>
-                <p style="color: white;margin:auto;">On the map, click this button to locate yourself and the nearest polls:</p>
-                <div class="mapboxgl-ctrl mapboxgl-ctrl-group dummy" style="width: 30px;display:inline-block;">
-                  <button class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate dummy" type="button" aria-label="Geolocate" aria-pressed="false"></button>
-                </div>
-        <p style="color: white;margin:auto;">You can also use this tool to search for an address:</p>
-          <div style="display:inline-block;" class="mapboxgl-ctrl-geocoder mapboxgl-ctrl dummy"><span class="geocoder-icon geocoder-icon-search"></span><input readonly type="text" placeholder="Search"></ul>
-
-        </div>
-
-        <a href="#">Why does this matter?</a>
-        <div class="video-container" id="video">
-          <iframe width="560" height="315" src="http://www.youtube.com/embed/T39hYJAwR40?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-        <a  href="#" style="background: url(check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
-            width: 46px;
-            height: 46px;"  onclick="toggle();toggleVideo();"
-        ></a>
-
+    <!-- Overlay content -->
+    <div class="overlay-content">
+      <a style="margin:auto;"><h3 style="margin-top: 0px;margin-bottom: 0px;">Let's Get to the Polls!</h3></a>
+      <a href='#'>How to use:</a>
+      <p style="color: white;display:inline-block;">On the map, click the button to locate yourself and the nearest polls or use the search tool to search for an address.</p>
+      <!-- <p style="color: white;margin:auto;">On the map, click this button to locate yourself and the nearest polls:</p>
+      <div class="mapboxgl-ctrl mapboxgl-ctrl-group dummy" style="width: 30px;display:inline-block;">
+        <button class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate dummy" type="button" aria-label="Geolocate" aria-pressed="false"></button>
       </div>
+      <p style="color: white;margin:auto;">You can also use this tool to search for an address:</p>
+      <div style="display:inline-block;" class="mapboxgl-ctrl-geocoder mapboxgl-ctrl dummy"><span class="geocoder-icon geocoder-icon-search"></span>
+        <input readonly type="text" placeholder="Search">
+        </ul> -->
+      <a href="#" style="background: url(check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
+            width: 36px;display:inline-block;
+            height: 36px;" onclick="toggle();toggleVideo();"></a>
+    </div>
 
-
-
+    <!-- <a href="#">Why does this matter?</a> -->
+    <div class="video-container" id="video">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/hArkyCqBRrI?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
     </div>
-    <!-- Use any element to open/show the overlay navigation menu -->
-    <nav id="menu" >
-      <a href="#" style="background: url(question-circle.svg); background-repeat: no-repeat;height:100%;width:100%;"  onclick="toggle()">
-       </a>
-    </nav>
+
+  </div>
 
 
-    <div id='map' class='map'> </div>
+
+
+  </div>
+  <!-- Use any element to open/show the overlay navigation menu -->
+  <nav id="menu">
+    <a href="#" style="background: url(question-circle.svg); background-repeat: no-repeat;height:100%;width:100%;" onclick="toggle()">
+    </a>
+  </nav>
+
+
+  <div id='map' class='map'> </div>
 
 
 
   <script>
-  // This will let you use the .remove() function later on
-  if (!('remove' in Element.prototype)) {
-    Element.prototype.remove = function() {
-      if (this.parentNode) {
+    // This will let you use the .remove() function later on
+    if (!('remove' in Element.prototype)) {
+      Element.prototype.remove = function() {
+        if (this.parentNode) {
           this.parentNode.removeChild(this);
-      }
-    };
-  }
-
-  mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2lqbmpqazdlMDBsdnRva284cWd3bm11byJ9.V6Hg2oYJwMAxeoR9GEzkAA';
-
-  // This adds the map
-  var map = new mapboxgl.Map({
-    // container id specified in the HTML
-    container: 'map',
-    // style URL
-    style: 'mapbox://styles/mapbox/light-v9',
-    // initial position in [long, lat] format
-    center: [-89.3985283, 40.6331249],
-    // initial zoom
-    zoom: 5
-  });
-
-  var stores = PollingPlaces;
-  // This adds the data to the map
-  map.on('load', function (e) {
-    // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
-    map.addSource("places", {
-      "type": "geojson",
-      "data": stores
-    });
-    // Initialize the list
-    buildLocationList(stores);
-
-    geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        bbox: [-91.51,36.97,-87.02,42.51]
-    });
-
-    geolocate = new mapboxgl.GeolocateControl({
-    positionOptions: {
-        enableHighAccuracy: true
-    },
-    trackUserLocation: true
-});
-
-    map.addControl(geocoder, 'top-left');
-
-    map.addControl(geolocate, 'top-left');
-
-    map.addSource('single-point', {
-      "type": "geojson",
-      "data": {
-        "type": "FeatureCollection",
-        "features": [] // Notice that initially there are no features
-      }
-    });
-
-
-
-    map.addLayer({
-      "id": "point",
-      "source": "single-point",
-      "type": "circle",
-      "paint": {
-        "circle-radius": 10,
-        "circle-color": "#007cbf",
-        "circle-stroke-width": 3,
-        "circle-stroke-color": "#fff"
-      }
-    });
-
-    geocoder.on('result', function(ev) {
-      var searchResult = ev.result.geometry;
-      map.getSource('single-point').setData(searchResult);
-
-      var options = {units: 'miles'};
-      stores.features.forEach(function(store){
-        Object.defineProperty(store.properties, 'distance', {
-          value: turf.distance(searchResult, store.geometry, options),
-          writable: true,
-          enumerable: true,
-          configurable: true
-        });
-      });
-
-      stores.features.sort(function(a,b){
-        if (a.properties.distance > b.properties.distance) {
-          return 1;
         }
-        if (a.properties.distance < b.properties.distance) {
-          return -1;
-        }
-        // a must be equal to b
-        return 0;
+      };
+    }
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2lqbmpqazdlMDBsdnRva284cWd3bm11byJ9.V6Hg2oYJwMAxeoR9GEzkAA';
+
+    // This adds the map
+    var map = new mapboxgl.Map({
+      // container id specified in the HTML
+      container: 'map',
+      // style URL
+      style: 'mapbox://styles/mapbox/light-v9',
+      // initial position in [long, lat] format
+      center: [-89.3985283, 40.6331249],
+      // initial zoom
+      zoom: 5
+    });
+
+    var stores = PollingPlaces;
+    // This adds the data to the map
+    map.on('load', function(e) {
+      // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
+      map.addSource("places", {
+        "type": "geojson",
+        "data": stores
       });
-
-      var listings = document.getElementById('listings');
-      while (listings.firstChild) {
-        listings.removeChild(listings.firstChild);
-      }
-
+      // Initialize the list
       buildLocationList(stores);
 
-      function sortLonLat(storeIdentifier) {
-        var lats = [stores.features[storeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]]
-        var lons = [stores.features[storeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]]
+      geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        bbox: [-91.51, 36.97, -87.02, 42.51]
+      });
 
-        var sortedLons = lons.sort(function(a,b){
-            if (a > b) { return 1; }
-            if (a.distance < b.distance) { return -1; }
-            return 0;
-          });
-        var sortedLats = lats.sort(function(a,b){
-            if (a > b) { return 1; }
-            if (a.distance < b.distance) { return -1; }
-            return 0;
-          });
+      geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      });
 
-        map.fitBounds([
-          [sortedLons[0], sortedLats[0]],
-          [sortedLons[1], sortedLats[1]]
-        ], {
-          padding: 100
+      map.addControl(geocoder, 'top-left');
+
+      map.addControl(geolocate, 'top-left');
+
+      map.addSource('single-point', {
+        "type": "geojson",
+        "data": {
+          "type": "FeatureCollection",
+          "features": [] // Notice that initially there are no features
+        }
+      });
+
+
+
+      map.addLayer({
+        "id": "point",
+        "source": "single-point",
+        "type": "circle",
+        "paint": {
+          "circle-radius": 10,
+          "circle-color": "#007cbf",
+          "circle-stroke-width": 3,
+          "circle-stroke-color": "#fff"
+        }
+      });
+
+      geocoder.on('result', function(ev) {
+        var searchResult = ev.result.geometry;
+        map.getSource('single-point').setData(searchResult);
+
+        var options = {
+          units: 'miles'
+        };
+        stores.features.forEach(function(store) {
+          Object.defineProperty(store.properties, 'distance', {
+            value: turf.distance(searchResult, store.geometry, options),
+            writable: true,
+            enumerable: true,
+            configurable: true
+          });
         });
-      };
 
-      sortLonLat(0);
-      createPopUp(stores.features[0]);
+        stores.features.sort(function(a, b) {
+          if (a.properties.distance > b.properties.distance) {
+            return 1;
+          }
+          if (a.properties.distance < b.properties.distance) {
+            return -1;
+          }
+          // a must be equal to b
+          return 0;
+        });
 
+        var listings = document.getElementById('listings');
+        while (listings.firstChild) {
+          listings.removeChild(listings.firstChild);
+        }
+
+        buildLocationList(stores);
+
+        function sortLonLat(storeIdentifier) {
+          var lats = [stores.features[storeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]]
+          var lons = [stores.features[storeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]]
+
+          var sortedLons = lons.sort(function(a, b) {
+            if (a > b) {
+              return 1;
+            }
+            if (a.distance < b.distance) {
+              return -1;
+            }
+            return 0;
+          });
+          var sortedLats = lats.sort(function(a, b) {
+            if (a > b) {
+              return 1;
+            }
+            if (a.distance < b.distance) {
+              return -1;
+            }
+            return 0;
+          });
+
+          map.fitBounds([
+            [sortedLons[0], sortedLats[0]],
+            [sortedLons[1], sortedLats[1]]
+          ], {
+            padding: 100
+          });
+        };
+
+        sortLonLat(0);
+        createPopUp(stores.features[0]);
+
+      });
     });
-  });
 
-  // This is where your interactions with the symbol layer used to be
-  // Now you have interactions with DOM markers instead
-  stores.features.forEach(function(marker, i) {
-    // Create an img element for the marker
-    var el = document.createElement('div');
-    el.id = "marker-" + i;
-    el.className = 'marker';
-    // Add markers to the map at all points
-    new mapboxgl.Marker(el, {offset: [0, -23]})
+    // This is where your interactions with the symbol layer used to be
+    // Now you have interactions with DOM markers instead
+    stores.features.forEach(function(marker, i) {
+      // Create an img element for the marker
+      var el = document.createElement('div');
+      el.id = "marker-" + i;
+      el.className = 'marker';
+      // Add markers to the map at all points
+      new mapboxgl.Marker(el, {
+          offset: [0, -23]
+        })
         .setLngLat(marker.geometry.coordinates)
         .addTo(map);
 
-    el.addEventListener('click', function(e){
+      el.addEventListener('click', function(e) {
         // 1. Fly to the point
         flyToStore(marker);
 
@@ -556,123 +606,123 @@
 
         e.stopPropagation();
         if (activeItem[0]) {
-           activeItem[0].classList.remove('active');
+          activeItem[0].classList.remove('active');
         }
 
         var listing = document.getElementById('listing-' + i);
         listing.classList.add('active');
 
+      });
     });
-  });
 
 
-  function flyToStore(currentFeature) {
-    map.flyTo({
+    function flyToStore(currentFeature) {
+      map.flyTo({
         center: currentFeature.geometry.coordinates,
         zoom: 15
       });
-  }
-
-  function createPopUp(currentFeature) {
-    var popUps = document.getElementsByClassName('mapboxgl-popup');
-    if (popUps[0]) popUps[0].remove();
-
-
-    var popup = new mapboxgl.Popup({closeOnClick: false})
-          .setLngLat(currentFeature.geometry.coordinates)
-          .setHTML('<h3>Early Voting Location</h3>' +
-            '<h4>' + currentFeature.properties.Address + '</h4>')
-          .addTo(map);
-  }
-
-
-  function buildLocationList(data) {
-    for (i = 0; i < data.features.length; i++) {
-      var currentFeature = data.features[i];
-      var prop = currentFeature.properties;
-
-      var listings = document.getElementById('listings');
-      var listing = listings.appendChild(document.createElement('div'));
-      listing.className = 'item';
-      listing.id = "listing-" + i;
-
-      var link = listing.appendChild(document.createElement('a'));
-      link.href = '#';
-      link.className = 'title';
-      link.dataPosition = i;
-      link.innerHTML = prop.Address;
-
-      var details = listing.appendChild(document.createElement('div'));
-      details.innerHTML = prop.Description;
-      if (prop.phone) {
-        details.innerHTML += ' &middot; ' + prop.phoneFormatted;
-      }
-
-      if (prop.distance) {
-        var roundedDistance = Math.round(prop.distance*100)/100;
-        details.innerHTML += '<p><strong>' + roundedDistance + ' miles away</strong></p>';
-      }
-
-
-      link.addEventListener('click', function(e){
-        // Update the currentFeature to the store associated with the clicked link
-        var clickedListing = data.features[this.dataPosition];
-
-        // 1. Fly to the point
-        flyToStore(clickedListing);
-
-        // 2. Close all other popups and display popup for clicked store
-        createPopUp(clickedListing);
-
-        // 3. Highlight listing in sidebar (and remove highlight for all other listings)
-        var activeItem = document.getElementsByClassName('active');
-
-        if (activeItem[0]) {
-           activeItem[0].classList.remove('active');
-        }
-        this.parentNode.classList.add('active');
-
-      });
     }
-  }
+
+    function createPopUp(currentFeature) {
+      var popUps = document.getElementsByClassName('mapboxgl-popup');
+      if (popUps[0]) popUps[0].remove();
 
 
+      var popup = new mapboxgl.Popup({
+          closeOnClick: false
+        })
+        .setLngLat(currentFeature.geometry.coordinates)
+        .setHTML('<h3>Early Voting Location</h3>' +
+          '<h4>' + currentFeature.properties.Address + '</h4>')
+        .addTo(map);
+    }
 
-    </script>
-    <script>
-      /* Open */
+
+    function buildLocationList(data) {
+      for (i = 0; i < data.features.length; i++) {
+        var currentFeature = data.features[i];
+        var prop = currentFeature.properties;
+
+        var listings = document.getElementById('listings');
+        var listing = listings.appendChild(document.createElement('div'));
+        listing.className = 'item';
+        listing.id = "listing-" + i;
+
+        var link = listing.appendChild(document.createElement('a'));
+        link.href = '#';
+        link.className = 'title';
+        link.dataPosition = i;
+        link.innerHTML = prop.Address;
+
+        var details = listing.appendChild(document.createElement('div'));
+        details.innerHTML = prop.Description;
+        if (prop.phone) {
+          details.innerHTML += ' &middot; ' + prop.phoneFormatted;
+        }
+
+        if (prop.distance) {
+          var roundedDistance = Math.round(prop.distance * 100) / 100;
+          details.innerHTML += '<p><strong>' + roundedDistance + ' miles away</strong></p>';
+        }
+
+
+        link.addEventListener('click', function(e) {
+          // Update the currentFeature to the store associated with the clicked link
+          var clickedListing = data.features[this.dataPosition];
+
+          // 1. Fly to the point
+          flyToStore(clickedListing);
+
+          // 2. Close all other popups and display popup for clicked store
+          createPopUp(clickedListing);
+
+          // 3. Highlight listing in sidebar (and remove highlight for all other listings)
+          var activeItem = document.getElementsByClassName('active');
+
+          if (activeItem[0]) {
+            activeItem[0].classList.remove('active');
+          }
+          this.parentNode.classList.add('active');
+
+        });
+      }
+    }
+  </script>
+  <script>
+    /* Open */
     function openNav() {
-        document.getElementById("myNav").style.width = "66%";
+      document.getElementById("myNav").style.width = "66%";
 
 
     }
 
     /* Close */
     function closeNav() {
-        document.getElementById("myNav").style.width = "0";
+      document.getElementById("myNav").style.width = "0";
     }
 
     function toggle() {
-    var x = document.getElementById("myNav");
-    if (x.getAttribute('data-value') === "0") {
-      openNav();
-      x.setAttribute('data-value', "1");
-    } else {
-      closeNav();
-x.setAttribute('data-value', "0");
+      var x = document.getElementById("myNav");
+      if (x.getAttribute('data-value') === "0") {
+        openNav();
+        x.setAttribute('data-value', "1");
+      } else {
+        closeNav();
+        x.setAttribute('data-value', "0");
+      }
     }
-}
-    </script>
-    <script>
-function toggleVideo(state) {
-    // if state == 'hide', hide. Else: show video
-    var div = document.getElementById("video");
-    var iframe = div.getElementsByTagName("iframe")[0].contentWindow;
-    div.style.display = state == 'hide' ? 'none' : '';
-    func = state == 'hide' ? 'pauseVideo' : 'playVideo';
-    iframe.postMessage('{"event":"command","func":"' + func + '","args":""}', '*');
-}
-</script>
+  </script>
+  <script>
+    function toggleVideo(state) {
+      // if state == 'hide', hide. Else: show video
+      var div = document.getElementById("video");
+      var iframe = div.getElementsByTagName("iframe")[0].contentWindow;
+      div.style.display = state == 'hide' ? 'none' : '';
+      func = state == 'hide' ? 'pauseVideo' : 'playVideo';
+      iframe.postMessage('{"event":"command","func":"' + func + '","args":""}', '*');
+    }
+  </script>
 
-  </body>
+</body>
+
 </html>
