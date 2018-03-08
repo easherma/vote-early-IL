@@ -12,7 +12,7 @@
 </script>
 
       <meta charset='utf-8' />
-      <title>Store Locator</title>
+      <title>Vote Early Illinois!</title>
       <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
       <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
       <!-- Mapbox GL JS -->
@@ -149,32 +149,34 @@
         .overlay {
             /* Height & width depends on how you want to reveal the overlay (see JS below) */
             height: 100%;
-            width: 100%;
+            width: 66%;
             position: fixed; /* Stay in place */
             z-index: 3; /* Sit on top */
-            left: 0;
+            right: 0;
             top: 0;
-            background-color: rgb(0,0,0); /* Black fallback color */
-            background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+            background-color: #404040; /* Black fallback color */
+            background-color: #404040c9; /* Black w/opacity */
             overflow-x: hidden; /* Disable horizontal scroll */
-            transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+            transition: 0.5s;
+            display: block; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
         }
 
         /* Position the content inside the overlay */
         .overlay-content {
             position: relative;
-            top: 25%; /* 25% from the top */
+            /* top: 5%; /* 25% from the top */ */
             width: 100%; /* 100% width */
-            text-align: center; /* Centered text/links */
+            text-align: left; /* Centered text/links */
             margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+            margin-left: 10px;
         }
 
         /* The navigation links inside the overlay */
         .overlay a {
             padding: 8px;
             text-decoration: none;
-            font-size: 36px;
-            color: #818181;
+            font-size: 22px;
+            color: #fff;
             display: block; /* Display block instead of inline */
             transition: 0.3s; /* Transition effects on hover (color) */
         }
@@ -204,16 +206,19 @@
 
 
 
+
+
         #menu {
-    /* background: #342c5f; */
+    background: #fff;
     position: absolute;
-    z-index: 1;
-    top: 10px;
-    right: 10px;
-    border-radius: 30px;
-    width: 10px;
+    z-index: 5;
+    top: 15px;
+    right: 15px;
+    border-radius: 20px;
+    width: 46px;
+    height: 46px;
     /* border: 1px solid rgba(0,0,0,0.4); */
-    font-family: 'Open Sans', sans-serif;
+    font-family:  400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
 }
 
 #menu a {
@@ -247,11 +252,15 @@
 }
 
 @media screen and (max-width: 800px) {
-#menu
-{
-top: 8%;
+  #menu
+  {
+  top: 10%;
+  }
+  #myNav  {
+    width: 100%;
+  }
 }
-}
+
 
         /* Marker tweaks */
         .mapboxgl-popup {
@@ -331,20 +340,34 @@ top: 8%;
     </div>
 
     <!-- The overlay -->
-    <div id="myNav" class="overlay">
+    <div id="myNav" class="overlay" data-value="1">
 
       <!-- Button to close the overlay navigation -->
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggle()">&times;</a> -->
 
       <!-- Overlay content -->
       <div class="overlay-content">
+        <a href='#'><h3>Let's Get to the Polls!<h3></a>
+        <a href='#' >How to use:</a>
+                <p style="color: white;">On the map, click this button to locate yourself and the nearest polls:</p>
+                <div class="mapboxgl-ctrl mapboxgl-ctrl-group dummy" style="width: 30px;display:inline-block;">
+                  <button class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate dummy" type="button" aria-label="Geolocate" aria-pressed="false"></button>
+                </div>
+        <p style="color: white;">You can also use this tool to search for an address:</p>
+          <div style="display:inline-block;" class="mapboxgl-ctrl-geocoder mapboxgl-ctrl dummy"><span class="geocoder-icon geocoder-icon-search"></span><input readonly type="text" placeholder="Search"></ul>
+
+        </div>
+
         <a href="#">About</a>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/hArkyCqBRrI?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </div>
 
     </div>
     <!-- Use any element to open/show the overlay navigation menu -->
-    <nav id="menu" ><a href="#" style="background: url(question-circle.svg); background-repeat: no-repeat;"  onclick="openNav()"> </a></nav>
+    <nav id="menu" >
+      <a href="#" style="background: url(question-circle.svg); background-repeat: no-repeat; z-index:5;height:100%;width:100%;"  onclick="toggle()">
+       </a>
+    </nav>
 
 
     <div id='map' class='map'> </div>
@@ -589,17 +612,32 @@ top: 8%;
     }
   }
 
-  /* Open */
-function openNav() {
-    document.getElementById("myNav").style.height = "100%";
+
+
+    </script>
+    <script>
+      /* Open */
+    function openNav() {
+        document.getElementById("myNav").style.width = "66%";
+
+
+    }
+
+    /* Close */
+    function closeNav() {
+        document.getElementById("myNav").style.width = "0";
+    }
+
+    function toggle() {
+    var x = document.getElementById("myNav");
+    if (x.getAttribute('data-value') === "0") {
+      openNav();
+      x.setAttribute('data-value', "1");
+    } else {
+      closeNav();
+x.setAttribute('data-value', "0");
+    }
 }
-
-/* Close */
-function closeNav() {
-    document.getElementById("myNav").style.height = "0%";
-}
-
-
     </script>
 
   </body>
