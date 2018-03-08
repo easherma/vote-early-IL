@@ -72,7 +72,7 @@
           min-height:60px;
           line-height:60px;
           padding:0 10px;
-          background-color: #00853e;
+          background-color: #342c5f;
           color: #fff;
         }
 
@@ -92,13 +92,13 @@
         .listings .item:last-child { border-bottom:none; }
         .listings .item .title {
           display:block;
-          color:#00853e;
+          color:#342c5f;
           font-weight:700;
         }
 
         .listings .item .title small { font-weight:400; }
         .listings .item.active .title,
-        .listings .item .title:hover { color:#8cc63f; }
+        .listings .item .title:hover { color:#f2d7ca; }
         .listings .item.active {
           background-color:#f8f8f8;
         }
@@ -138,7 +138,7 @@
         /* The Overlay (background) */
         .overlay {
             /* Height & width depends on how you want to reveal the overlay (see JS below) */
-            height: 0;
+            height: 100%;
             width: 100%;
             position: fixed; /* Stay in place */
             z-index: 3; /* Sit on top */
@@ -195,20 +195,20 @@
 
 
         #menu {
-    background: #fff;
+    /* background: #342c5f; */
     position: absolute;
     z-index: 1;
     top: 10px;
     right: 10px;
-    border-radius: 3px;
-    width: 120px;
-    border: 1px solid rgba(0,0,0,0.4);
+    border-radius: 30px;
+    width: 10px;
+    /* border: 1px solid rgba(0,0,0,0.4); */
     font-family: 'Open Sans', sans-serif;
 }
 
 #menu a {
     font-size: 13px;
-    color: #404040;
+    color: white;
     display: block;
     margin: 0;
     padding: 0;
@@ -260,7 +260,7 @@ top: 8%;
           padding:1%;
         }
         .mapboxgl-popup-content h3 {
-          background:#91c949;
+          background:#342c5f;
           color:#fff;
           margin:0;
           display:block;
@@ -290,7 +290,7 @@ top: 8%;
         }
 
         .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-          border-bottom-color: #91c949;
+          border-bottom-color: #342c5f;
         }
 
         .mapboxgl-ctrl-geocoder {
@@ -334,7 +334,7 @@ top: 8%;
 
     </div>
     <!-- Use any element to open/show the overlay navigation menu -->
-    <nav id="menu"><a href="#" class="active" onclick="openNav()">HALP!</a></nav>
+    <nav id="menu" ><a href="#" style="background: url(question-circle.svg); background-repeat: no-repeat;"  onclick="openNav()"> </a></nav>
 
 
     <div id='map' class='map'> </div>
@@ -523,7 +523,7 @@ top: 8%;
 
     var popup = new mapboxgl.Popup({closeOnClick: false})
           .setLngLat(currentFeature.geometry.coordinates)
-          .setHTML('<h3>Eary Voting Location</h3>' +
+          .setHTML('<h3>Early Voting Location</h3>' +
             '<h4>' + currentFeature.properties.Address + '</h4>')
           .addTo(map);
   }
