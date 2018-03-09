@@ -23,8 +23,8 @@
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
   <!-- Geocoder plugin -->
-  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
-  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css' type='text/css' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
   <!-- Turf.js plugin -->
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
   <script type="text/javascript" src="early_voting.js"></script>
@@ -405,6 +405,7 @@
       <a style="margin:auto;"><h3 style="margin-top: 0px;margin-bottom: 0px;">Let's Get to the Polls!</h3></a>
       <a href='#'>How to use:</a>
       <p style="color: white;display:inline-block;">On the map, click the button to locate yourself and the nearest polls or use the search tool to search for an address.</p>
+      <div id='geocoder' class='mapboxgl-ctrl-geocoder'></div>
       <!-- <p style="color: white;margin:auto;">On the map, click this button to locate yourself and the nearest polls:</p>
       <div class="mapboxgl-ctrl mapboxgl-ctrl-group dummy" style="width: 30px;display:inline-block;">
         <button class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate dummy" type="button" aria-label="Geolocate" aria-pressed="false"></button>
@@ -462,35 +463,37 @@
       // initial position in [long, lat] format
       center: [-89.3985283, 40.6331249],
       // initial zoom
-      zoom: 5
+      zoom: 6
     });
 
-    var stores = PollingPlaces;
+    var polls = PollingPlaces;
+    var geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      bbox: [-91.51, 36.97, -87.02, 42.51],
+
+    });
+    geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true
+      },
+      trackUserLocation: true
+    });
+
+    map.addControl(geocoder, 'top-left');
+    map.addControl(geolocate, 'top-left');
     // This adds the data to the map
     map.on('load', function(e) {
       // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
       map.addSource("places", {
         "type": "geojson",
-        "data": stores
+        "data": polls
       });
       // Initialize the list
-      buildLocationList(stores);
+      buildLocationList(polls);
 
-      geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        bbox: [-91.51, 36.97, -87.02, 42.51]
-      });
 
-      geolocate = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      });
 
-      map.addControl(geocoder, 'top-left');
 
-      map.addControl(geolocate, 'top-left');
 
       map.addSource('single-point', {
         "type": "geojson",
@@ -521,16 +524,16 @@
         var options = {
           units: 'miles'
         };
-        stores.features.forEach(function(store) {
-          Object.defineProperty(store.properties, 'distance', {
-            value: turf.distance(searchResult, store.geometry, options),
+        polls.features.forEach(function(poll) {
+          Object.defineProperty(poll.properties, 'distance', {
+            value: turf.distance(searchResult, poll.geometry, options),
             writable: true,
             enumerable: true,
             configurable: true
           });
         });
 
-        stores.features.sort(function(a, b) {
+        polls.features.sort(function(a, b) {
           if (a.properties.distance > b.properties.distance) {
             return 1;
           }
@@ -546,11 +549,11 @@
           listings.removeChild(listings.firstChild);
         }
 
-        buildLocationList(stores);
+        buildLocationList(polls);
 
-        function sortLonLat(storeIdentifier) {
-          var lats = [stores.features[storeIdentifier].geometry.coordinates[1], searchResult.coordinates[1]]
-          var lons = [stores.features[storeIdentifier].geometry.coordinates[0], searchResult.coordinates[0]]
+        function sortLonLat(pollIdentifier) {
+          var lats = [polls.features[pollIdentifier].geometry.coordinates[1], searchResult.coordinates[1]]
+          var lons = [polls.features[pollIdentifier].geometry.coordinates[0], searchResult.coordinates[0]]
 
           var sortedLons = lons.sort(function(a, b) {
             if (a > b) {
@@ -575,19 +578,20 @@
             [sortedLons[0], sortedLats[0]],
             [sortedLons[1], sortedLats[1]]
           ], {
-            padding: 100
+            padding: 100,
+            maxZoom: 12
           });
         };
 
         sortLonLat(0);
-        createPopUp(stores.features[0]);
+        createPopUp(polls.features[0]);
 
       });
     });
 
     // This is where your interactions with the symbol layer used to be
     // Now you have interactions with DOM markers instead
-    stores.features.forEach(function(marker, i) {
+    polls.features.forEach(function(marker, i) {
       // Create an img element for the marker
       var el = document.createElement('div');
       el.id = "marker-" + i;
@@ -601,9 +605,9 @@
 
       el.addEventListener('click', function(e) {
         // 1. Fly to the point
-        flyToStore(marker);
+        flyToPoll(marker);
 
-        // 2. Close all other popups and display popup for clicked store
+        // 2. Close all other popups and display popup for clicked poll
         createPopUp(marker);
 
         // 3. Highlight listing in sidebar (and remove highlight for all other listings)
@@ -621,10 +625,10 @@
     });
 
 
-    function flyToStore(currentFeature) {
+    function flyToPoll(currentFeature) {
       map.flyTo({
         center: currentFeature.geometry.coordinates,
-        zoom: 15
+        zoom: 7
       });
     }
 
@@ -672,13 +676,13 @@
 
 
         link.addEventListener('click', function(e) {
-          // Update the currentFeature to the store associated with the clicked link
+          // Update the currentFeature to the poll associated with the clicked link
           var clickedListing = data.features[this.dataPosition];
 
           // 1. Fly to the point
-          flyToStore(clickedListing);
+          flyToPoll(clickedListing);
 
-          // 2. Close all other popups and display popup for clicked store
+          // 2. Close all other popups and display popup for clicked poll
           createPopUp(clickedListing);
 
           // 3. Highlight listing in sidebar (and remove highlight for all other listings)
