@@ -371,11 +371,19 @@
       margin-top: 0;
       border: 0;
     }
-
-    .mapboxgl-ctrl-geocoder > div {
+    /* .geocoder {
+    position:absolute;
+    z-index:3;
+    width:50%;
+    left:50%;
+    margin-left:-25%;
+    top:20px;
+} */
+    /*
+    .mapboxgl-ctrl-geocoder {
       min-width: 100%;
       margin-left: 0;
-    }
+    } */
   </style>
 </head>
 
@@ -401,11 +409,11 @@
     <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggle()">&times;</a> -->
 
     <!-- Overlay content -->
-    <div class="overlay-content">
+    <div class="overlay-content" id='overlay-content'>
       <a style="margin:auto;"><h3 style="margin-top: 0px;margin-bottom: 0px;">Let's Get to the Polls!</h3></a>
       <a href='#'>How to use:</a>
       <p style="color: white;display:inline-block;">On the map, click the button to locate yourself and the nearest polls or use the search tool to search for an address.</p>
-      <div id='geocoder' class='mapboxgl-ctrl-geocoder'></div>
+      <div id='overlay-geocoder' class='mapboxgl-ctrl-geocoder mapboxgl-ctrl'></div>
       <!-- <p style="color: white;margin:auto;">On the map, click this button to locate yourself and the nearest polls:</p>
       <div class="mapboxgl-ctrl mapboxgl-ctrl-group dummy" style="width: 30px;display:inline-block;">
         <button class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate dummy" type="button" aria-label="Geolocate" aria-pressed="false"></button>
@@ -414,7 +422,7 @@
       <div style="display:inline-block;" class="mapboxgl-ctrl-geocoder mapboxgl-ctrl dummy"><span class="geocoder-icon geocoder-icon-search"></span>
         <input readonly type="text" placeholder="Search">
         </ul> -->
-      <a href="#" style="background: url(check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
+      <a id='check' href="#" style="background: url(check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
             width: 36px;display:inline-block;
             height: 36px;" onclick="toggle();"></a>
     </div>
@@ -479,8 +487,15 @@
       trackUserLocation: true
     });
 
-    map.addControl(geocoder, 'top-left');
+    // map.addControl(geocoder, 'top-left');
+    geocoderInit = geocoder.onAdd(map);
     map.addControl(geolocate, 'top-left');
+    document.getElementById('overlay-geocoder').appendChild(geocoder.container);
+
+    // get overlay element and remove when nav is closed
+    // document.getElementById('overlay-geocoder').cloneNode(geocoder.onAdd(map));
+    // document.getElementById('overlay-geocoder').appendChild(geocoder.onAdd(map));
+    // document.getElementById('overlay-geocoder').parentNode.removeChild(document.getElementById('overlay-geocoder'));
     // This adds the data to the map
     map.on('load', function(e) {
       // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
@@ -520,6 +535,9 @@
       geocoder.on('result', function(ev) {
         var searchResult = ev.result.geometry;
         map.getSource('single-point').setData(searchResult);
+        if (document.getElementById("myNav").getAttribute('data-value') === "1") {
+          toggle();
+        };
 
         var options = {
           units: 'miles'
@@ -703,20 +721,32 @@
       document.getElementById("myNav").style.width = "66%";
 
 
+
     }
 
     /* Close */
     function closeNav() {
       document.getElementById("myNav").style.width = "0";
+      map.addControl(geocoder, 'top-left');
+      // document.getElementById('overlay-geocoder').removeChild(geocoder.container);
+
+
+
     }
 
     function toggle() {
       var x = document.getElementById("myNav");
       if (x.getAttribute('data-value') === "0") {
         openNav();
+        // map.removeControl(geocoder, 'top-left');
+        geocoder._clear()
+        document.getElementById('overlay-geocoder').appendChild(geocoder.container);
         x.setAttribute('data-value', "1");
       } else {
         closeNav();
+        if (document.getElementById('overlay-geocoder').children[0] != null) {
+          document.getElementById('overlay-geocoder').removeChild(document.getElementById('overlay-geocoder').children[0]);
+        };
         x.setAttribute('data-value', "0");
       }
     }
