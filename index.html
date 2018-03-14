@@ -27,364 +27,10 @@
   <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
   <!-- Turf.js plugin -->
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-  <script type="text/javascript" src="early_voting.js"></script>
-  <style>
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      padding-top: 30px;
-      height: 0;
-      overflow: hidden;
-    }
+  <script type="text/javascript" src="./assets/data/early_voting.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Martel|Poppins" rel="stylesheet">
+  <link rel = "stylesheet" type = "text/css" href = "/css/site.css" />
 
-    .video-container iframe,
-    .video-container object,
-    .video-container embed {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    body {
-      color: #404040;
-      font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      margin: 0;
-      padding: 0;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    * {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-    }
-
-    .sidebar {
-      position: absolute;
-      width: 33.3333%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      border-right: 1px solid rgba(0, 0, 0, 0.25);
-    }
-
-    .pad2 {
-      padding: 20px;
-    }
-
-    .map {
-      position: absolute;
-      left: 33.3333%;
-      width: 66.6666%;
-      top: 0;
-      bottom: 0;
-    }
-
-    h1 {
-      font-size: 22px;
-      margin: 0;
-      font-weight: 400;
-      line-height: 20px;
-      padding: 20px 2px;
-    }
-
-    a {
-      color: #404040;
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: #101010;
-    }
-
-    .heading {
-      background: #fff;
-      border-bottom: 1px solid #eee;
-      min-height: 40px;
-      line-height: 10px;
-      padding: 0 5px;
-      background-color: #342c5f;
-      color: #fff;
-    }
-
-    .listings {
-      height: 100%;
-      overflow: auto;
-      padding-bottom: 60px;
-    }
-
-    .listings .item {
-      display: block;
-      border-bottom: 1px solid #eee;
-      padding: 10px;
-      text-decoration: none;
-    }
-
-    .listings .item:last-child {
-      border-bottom: none;
-    }
-
-    .listings .item .title {
-      display: block;
-      color: #342c5f;
-      font-weight: 700;
-    }
-
-    .listings .item .title small {
-      font-weight: 400;
-    }
-
-    .listings .item.active .title,
-    .listings .item .title:hover {
-      color: #f2d7ca;
-    }
-
-    .listings .item.active {
-      background-color: #f8f8f8;
-    }
-
-    ::-webkit-scrollbar {
-      width: 3px;
-      height: 3px;
-      border-left: 0;
-      background: rgba(0, 0, 0, 0.1);
-    }
-
-    ::-webkit-scrollbar-track {
-      background: none;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #00853e;
-      border-radius: 0;
-    }
-
-    .marker {
-      border: none;
-      cursor: pointer;
-      height: 56px;
-      width: 56px;
-      background-image: url(marker.svg);
-      background-repeat: no-repeat;
-      background-color: rgba(0, 0, 0, 0);
-    }
-
-    .clearfix {
-      display: block;
-    }
-
-    .clearfix:after {
-      content: '.';
-      display: block;
-      height: 0;
-      clear: both;
-      visibility: hidden;
-    }
-    /* The Overlay (background) */
-
-    .overlay {
-      /* Height & width depends on how you want to reveal the overlay (see JS below) */
-      height: 100%;
-      width: 66%;
-      position: fixed;
-      /* Stay in place */
-      z-index: 3;
-      /* Sit on top */
-      right: 0;
-      top: 0;
-      background-color: #404040;
-      /* Black fallback color */
-      background-color: #404040c9;
-      /* Black w/opacity */
-      overflow-x: hidden;
-      /* Disable horizontal scroll */
-      transition: 0.5s;
-      display: block;
-      /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
-    }
-    /* Position the content inside the overlay */
-
-    .overlay-content {
-      position: relative;
-      /* top: 5%; /* 25% from the top */
-      width: 100%;
-      /* 100% width */
-      text-align: left;
-      /* Centered text/links */
-      margin-top: 30px;
-      /* 30px top margin to avoid conflict with the close button on smaller screens */
-      margin-left: 10px;
-    }
-    /* The navigation links inside the overlay */
-
-    .overlay a {
-      padding: 8px;
-      text-decoration: none;
-      font-size: 22px;
-      color: #fff;
-      display: block;
-      /* Display block instead of inline */
-      transition: 0.3s;
-      /* Transition effects on hover (color) */
-    }
-    /* When you mouse over the navigation links, change their color */
-
-    .overlay a:hover,
-    .overlay a:focus {
-      color: #f1f1f1;
-    }
-    /* Position the close button (top right corner) */
-
-    .overlay .closebtn {
-      position: absolute;
-      top: 20px;
-      right: 45px;
-      font-size: 60px;
-    }
-    /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
-
-    @media screen and (max-height: 450px) {
-      .overlay a {
-        font-size: 20px
-      }
-      .overlay .closebtn {
-        font-size: 40px;
-        top: 15px;
-        right: 35px;
-      }
-    }
-
-    #menu {
-      background: #fff;
-      position: absolute;
-      z-index: 3;
-      top: 15px;
-      right: 15px;
-      border-radius: 20px;
-      width: 36px;
-      height: 36px;
-      /* border: 1px solid rgba(0,0,0,0.4); */
-      font-family: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-    }
-
-    #menu a {
-      font-size: 13px;
-      color: white;
-      display: block;
-      margin: 0;
-      padding: 0;
-      padding: 10px;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-      text-align: center;
-    }
-
-    #menu a:last-child {
-      border: none;
-    }
-
-    #menu a:hover {
-      background-color: #f8f8f8;
-      color: #404040;
-    }
-
-    #menu a.active {
-      background-color: #3887be;
-      color: #ffffff;
-    }
-
-    #menu a.active:hover {
-      background: #3074a4;
-    }
-
-    @media screen and (max-width: 800px) {
-      #menu {
-        top: 10%;
-      }
-      #myNav {
-        width: 100%;
-      }
-    }
-    /* Marker tweaks */
-
-    .mapboxgl-popup {
-      padding-bottom: 50px;
-    }
-
-    .mapboxgl-popup-close-button {
-      display: none;
-    }
-
-    .mapboxgl-popup-content {
-      font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
-      padding: 0;
-      width: 180px;
-    }
-
-    .mapboxgl-popup-content-wrapper {
-      padding: 1%;
-    }
-
-    .mapboxgl-popup-content h3 {
-      background: #342c5f;
-      color: #fff;
-      margin: 0;
-      display: block;
-      padding: 5px;
-      border-radius: 3px 3px 0 0;
-      font-weight: 700;
-      margin-top: -5px;
-    }
-
-    .mapboxgl-popup-content h4 {
-      margin: 0;
-      display: block;
-      padding: 10px 10px 10px 10px;
-      font-weight: 400;
-    }
-
-    .mapboxgl-popup-content div {
-      padding: 10px;
-    }
-
-    .mapboxgl-container .leaflet-marker-icon {
-      cursor: pointer;
-    }
-
-    .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
-      margin-top: 15px;
-    }
-
-    .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-      border-bottom-color: #342c5f;
-    }
-
-    .mapboxgl-ctrl-geocoder {
-      border: 2px solid #00853e;
-      border-radius: 0;
-      position: relative;
-      top: 0;
-      width: 800px;
-      margin-top: 0;
-      border: 0;
-    }
-    /* .geocoder {
-    position:absolute;
-    z-index:3;
-    width:50%;
-    left:50%;
-    margin-left:-25%;
-    top:20px;
-} */
-    /*
-    .mapboxgl-ctrl-geocoder {
-      min-width: 100%;
-      margin-left: 0;
-    } */
-  </style>
 </head>
 
 <body>
@@ -392,9 +38,9 @@
 
     <div class='heading'>
       <h1>Early Voting Locations</h1>
-      <p style="color: white;display:inline-block;height:40px;margin:auto;">Scraped and coded with love by
+      <p style="display:inline-block;height:40px;margin:auto;">Scraped and coded with love by
         <a href="https://osgisomg.com/">
-          <img src="osgisomg.svg" alt="OSGISOMG" style="width: 100%;height: auto;max-width: 200px;padding: 5px;display: block;">
+          <img src="/assets/images/osgisomg.svg" alt="OSGISOMG" style="width: 100%;height: auto;max-width: 200px;padding: 5px;display: block;">
         </a>
         <p>
     </div>
@@ -422,7 +68,7 @@
       <div style="display:inline-block;" class="mapboxgl-ctrl-geocoder mapboxgl-ctrl dummy"><span class="geocoder-icon geocoder-icon-search"></span>
         <input readonly type="text" placeholder="Search">
         </ul> -->
-      <a id='check' href="#" style="background: url(check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
+      <a id='check' href="#" style="background: url(assets/images/check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
             width: 36px;display:inline-block;
             height: 36px;" onclick="toggle();"></a>
     </div>
@@ -441,7 +87,7 @@
   </div>
   <!-- Use any element to open/show the overlay navigation menu -->
   <nav id="menu">
-    <a href="#" style="background: url(question-circle.svg); background-repeat: no-repeat;height:100%;width:100%;" onclick="toggle()">
+    <a href="#" style="background: url(assets/images/question-circle.svg); background-repeat: no-repeat;height:100%;width:100%;" onclick="toggle()">
     </a>
   </nav>
 
@@ -478,6 +124,7 @@
     var geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       bbox: [-91.51, 36.97, -87.02, 42.51],
+      placeholder: "Search for Early Vote Locations"
 
     });
     geolocate = new mapboxgl.GeolocateControl({
