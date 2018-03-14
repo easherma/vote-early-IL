@@ -27,7 +27,7 @@
   <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
   <!-- Turf.js plugin -->
   <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-  <script type="text/javascript" src="early_voting.js"></script>
+  <script type="text/javascript" src="./assets/data/early_voting.js"></script>
   <style>
     .video-container {
       position: relative;
@@ -167,7 +167,7 @@
       cursor: pointer;
       height: 56px;
       width: 56px;
-      background-image: url(marker.svg);
+      background-image: url(assets/images/marker.svg);
       background-repeat: no-repeat;
       background-color: rgba(0, 0, 0, 0);
     }
@@ -394,7 +394,7 @@
       <h1>Early Voting Locations</h1>
       <p style="color: white;display:inline-block;height:40px;margin:auto;">Scraped and coded with love by
         <a href="https://osgisomg.com/">
-          <img src="osgisomg.svg" alt="OSGISOMG" style="width: 100%;height: auto;max-width: 200px;padding: 5px;display: block;">
+          <img src="/assets/images/osgisomg.svg" alt="OSGISOMG" style="width: 100%;height: auto;max-width: 200px;padding: 5px;display: block;">
         </a>
         <p>
     </div>
@@ -422,7 +422,7 @@
       <div style="display:inline-block;" class="mapboxgl-ctrl-geocoder mapboxgl-ctrl dummy"><span class="geocoder-icon geocoder-icon-search"></span>
         <input readonly type="text" placeholder="Search">
         </ul> -->
-      <a id='check' href="#" style="background: url(check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
+      <a id='check' href="#" style="background: url(assets/images/check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
             width: 36px;display:inline-block;
             height: 36px;" onclick="toggle();"></a>
     </div>
@@ -441,7 +441,7 @@
   </div>
   <!-- Use any element to open/show the overlay navigation menu -->
   <nav id="menu">
-    <a href="#" style="background: url(question-circle.svg); background-repeat: no-repeat;height:100%;width:100%;" onclick="toggle()">
+    <a href="#" style="background: url(assets/images/question-circle.svg); background-repeat: no-repeat;height:100%;width:100%;" onclick="toggle()">
     </a>
   </nav>
 
