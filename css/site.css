@@ -34,12 +34,13 @@
 
   .sidebar {
     position: absolute;
-    width: 33.3333%;
-    height: 100%;
+    width: auto;
+    height: 66%;
     top: 0;
     left: 0;
     overflow: hidden;
-    border-right: 1px solid rgba(0, 0, 0, 0.25);
+    /* border-right: 1px solid rgba(0, 0, 0, 0.25); */
+    z-index: 2;
   }
 
   .pad2 {
@@ -48,8 +49,8 @@
 
   .map {
     position: absolute;
-    left: 33.3333%;
-    width: 66.6666%;
+    /* left: 33.3333%; */
+    width: 100%;
     top: 0;
     bottom: 0;
   }
@@ -78,19 +79,24 @@
     line-height: 10px;
     padding: 0 5px;
     background-color: #FFFFFF;
+    padding-bottom: 5px;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
     /* color: #fff; */
   }
 
   .listings {
-    height: 100%;
+    height: auto;
     overflow: auto;
-    padding-bottom: 60px;
+    padding-bottom: 2px;
+    background-color: #FFFF;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
   }
 
   .listings .item {
     display: block;
     border-bottom: 1px solid #eee;
     padding: 10px;
+    padding-bottom: 30px;
     text-decoration: none;
   }
 
@@ -143,6 +149,13 @@
     background-color: rgba(0, 0, 0, 0);
   }
 
+  .vote_icon {
+    height: 56px;
+    width: 56px;
+    float: left;
+
+  }
+
   .clearfix {
     display: block;
   }
@@ -159,7 +172,7 @@
   .overlay {
     /* Height & width depends on how you want to reveal the overlay (see JS below) */
     height: 100%;
-    width: 66%;
+    width: 0%;
     position: fixed;
     /* Stay in place */
     z-index: 3;
@@ -190,6 +203,11 @@
     margin-left: 10px;
   }
   /* The navigation links inside the overlay */
+  #overlay-geolocate {
+    width: fit-content;
+    float: left;
+  }
+
 
   .overlay a {
     padding: 8px;
@@ -352,7 +370,7 @@
     font-family: 400 15px/22px 'Poppins', Sans-serif;
   }
 
-  #map > div.mapboxgl-control-container > div.mapboxgl-ctrl-top-left > div.mapboxgl-ctrl-geocoder.mapboxgl-ctrl > ul
+
   /* .geocoder {
   position:absolute;
   z-index:3;
@@ -361,8 +379,7 @@
   margin-left:-25%;
   top:20px;
 } */
-  /*
-  .mapboxgl-ctrl-geocoder {
-    min-width: 100%;
-    margin-left: 0;
-  } */
+
+  .mapboxgl-ctrl-top-right .mapboxgl-ctrl{
+    float: left;
+  }

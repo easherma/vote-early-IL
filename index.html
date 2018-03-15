@@ -33,7 +33,7 @@
 
 </head>
 
-<body>
+<body onload="toggle()">
   <div class='sidebar'>
 
     <div class='heading'>
@@ -49,7 +49,7 @@
   </div>
 
   <!-- The overlay -->
-  <div id="myNav" class="overlay" data-value="1">
+  <div id="myNav" class="overlay" data-value="0" >
 
     <!-- Button to close the overlay navigation -->
     <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggle()">&times;</a> -->
@@ -60,6 +60,8 @@
       <a href='#'>How to use:</a>
       <p style="color: white;display:inline-block;">On the map, click the button to locate yourself and the nearest polls or use the search tool to search for an address.</p>
       <div id='overlay-geocoder' class='mapboxgl-ctrl-geocoder mapboxgl-ctrl'></div>
+      <div id='overlay-geolocate' ></div>
+
       <!-- <p style="color: white;margin:auto;">On the map, click this button to locate yourself and the nearest polls:</p>
       <div class="mapboxgl-ctrl mapboxgl-ctrl-group dummy" style="width: 30px;display:inline-block;">
         <button class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate dummy" type="button" aria-label="Geolocate" aria-pressed="false"></button>
@@ -117,7 +119,7 @@
       // initial position in [long, lat] format
       center: [-89.3985283, 40.6331249],
       // initial zoom
-      zoom: 6
+      zoom: 7
     });
 
     var polls = PollingPlaces;
@@ -127,7 +129,7 @@
       placeholder: "Search for Early Vote Locations"
 
     });
-    geolocate = new mapboxgl.GeolocateControl({
+    var geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true
       },
@@ -136,22 +138,25 @@
 
     // map.addControl(geocoder, 'top-left');
     geocoderInit = geocoder.onAdd(map);
-    map.addControl(geolocate, 'top-left');
-    document.getElementById('overlay-geocoder').appendChild(geocoder.container);
+    geolocateInit = geolocate.onAdd(map);
 
+    // document.getElementById('overlay-geocoder').appendChild(geocoder.container);
+    // document.getElementById('overlay-geolocate').appendChild(geolocate._container);
+    // document.getElementById('overlay-geocoder').appendChild(geolocate.container);
     // get overlay element and remove when nav is closed
     // document.getElementById('overlay-geocoder').cloneNode(geocoder.onAdd(map));
     // document.getElementById('overlay-geocoder').appendChild(geocoder.onAdd(map));
     // document.getElementById('overlay-geocoder').parentNode.removeChild(document.getElementById('overlay-geocoder'));
     // This adds the data to the map
     map.on('load', function(e) {
+
       // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
       map.addSource("places", {
         "type": "geojson",
         "data": polls
       });
       // Initialize the list
-      buildLocationList(polls);
+      // buildLocationList(polls);
 
 
 
@@ -263,7 +268,7 @@
       el.className = 'marker';
       // Add markers to the map at all points
       new mapboxgl.Marker(el, {
-          offset: [0, -23]
+          offset: [0, -23],
         })
         .setLngLat(marker.geometry.coordinates)
         .addTo(map);
@@ -313,7 +318,7 @@
 
 
     function buildLocationList(data) {
-      for (i = 0; i < data.features.length; i++) {
+      for (i = 0; i < 5; i++) {
         var currentFeature = data.features[i];
         var prop = currentFeature.properties;
 
@@ -333,10 +338,10 @@
         if (prop.phone) {
           details.innerHTML += ' &middot; ' + prop.phoneFormatted;
         }
-
+        details.innerHTML = '<div> <img class="vote_icon" style="display: inline-block;" src="../assets/images/marker.svg" alt="Vote"></div>'
         if (prop.distance) {
           var roundedDistance = Math.round(prop.distance * 100) / 100;
-          details.innerHTML += '<p><strong>' + roundedDistance + ' miles away</strong></p>';
+          details.innerHTML += '<p><strong>Only ' + roundedDistance + ' miles away!</strong></p>';
         }
 
 
@@ -365,20 +370,14 @@
   <script>
     /* Open */
     function openNav() {
-      document.getElementById("myNav").style.width = "66%";
-
-
-
+      document.getElementById("myNav").style.width = "100%";
     }
 
     /* Close */
     function closeNav() {
-      document.getElementById("myNav").style.width = "0";
-      map.addControl(geocoder, 'top-left');
+      document.getElementById("myNav").style.width = "0%";
+      // map.addControl(geocoder);
       // document.getElementById('overlay-geocoder').removeChild(geocoder.container);
-
-
-
     }
 
     function toggle() {
@@ -388,15 +387,21 @@
         // map.removeControl(geocoder, 'top-left');
         geocoder._clear()
         document.getElementById('overlay-geocoder').appendChild(geocoder.container);
+        document.getElementById('overlay-geolocate').appendChild(geolocate._container);
         x.setAttribute('data-value', "1");
       } else {
         closeNav();
-        if (document.getElementById('overlay-geocoder').children[0] != null) {
+        if (document.getElementById('overlay-geocoder').children[0] != undefined) {
           document.getElementById('overlay-geocoder').removeChild(document.getElementById('overlay-geocoder').children[0]);
         };
+        document.getElementById('overlay-geolocate').removeChild(document.getElementById('overlay-geolocate').children[0]);
+        map.addControl(geocoder);
+        map.addControl(geolocate);
         x.setAttribute('data-value', "0");
       }
     }
+
+
   </script>
   <script>
     function toggleVideo(state) {
@@ -408,7 +413,6 @@
       iframe.postMessage('{"event":"command","func":"' + func + '","args":""}', '*');
     }
   </script>
-
 </body>
 
 </html>
