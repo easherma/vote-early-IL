@@ -37,7 +37,7 @@
 </head>
 
 <body onload="toggle()">
-  <div class='sidebar'>
+  <div id='sidebar' class='sidebar'>
 
     <div class='heading'>
       <h2>Early Voting Locations</h2>
@@ -441,11 +441,15 @@
     /* Open */
     function openNav() {
       document.getElementById("myNav").style.width = "100%";
+      document.getElementById("sidebar").style.width = "0%";
+      document.getElementById("map").style.width = "100%";
     }
 
     /* Close */
     function closeNav() {
       document.getElementById("myNav").style.width = "0%";
+      document.getElementById("sidebar").style.width = "33%";
+      document.getElementById("map").style.width = "66%";
       // map.addControl(geocoder);
       // document.getElementById('overlay-geocoder').removeChild(geocoder.container);
     }
