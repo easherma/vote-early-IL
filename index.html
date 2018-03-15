@@ -408,11 +408,8 @@
         if (prop.phone) {
           details.innerHTML += ' &middot; ' + prop.phoneFormatted;
         }
-<<<<<<< HEAD
         details.innerHTML = '<div> <img class="vote_icon" style="display: inline-block;" src="./assets/images/marker.svg" alt="Vote"></div>'
-=======
-        details.innerHTML = '<div> <img class="vote_icon" style="display: inline-block;" src="../assets/images/marker.svg" alt="Vote"></div>'
->>>>>>> 5494e05dc862df8da72846c4df98fdd374bbb2eb
+
         if (prop.distance) {
           var roundedDistance = Math.round(prop.distance * 100) / 100;
           details.innerHTML += '<p><strong>Only ' + roundedDistance + ' miles away!</strong></p>';
