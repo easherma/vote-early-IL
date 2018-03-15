@@ -15,6 +15,8 @@
     left: 0;
     width: 100%;
     height: 100%;
+    max-width: 560px;
+    max-height:315px;
   }
 
   body {
@@ -34,8 +36,8 @@
 
   .sidebar {
     position: absolute;
-    width: auto;
-    height: 66%;
+    width: 33%;
+    height: 99%;
     top: 0;
     left: 0;
     overflow: hidden;
@@ -49,19 +51,19 @@
 
   .map {
     position: absolute;
-    /* left: 33.3333%; */
-    width: 100%;
+    left: 33.3333%;
+    width: 66%;
     top: 0;
     bottom: 0;
   }
 
-  h1 {
+  /* h1 {
     font-size: 22px;
     margin: 0;
     font-weight: 400;
     line-height: 20px;
     padding: 20px 2px;
-  }
+  } */
 
   a {
     color: #404040;
@@ -85,7 +87,7 @@
   }
 
   .listings {
-    height: auto;
+    height: 100%;
     overflow: auto;
     padding-bottom: 2px;
     background-color: #FFFF;
@@ -181,7 +183,7 @@
     top: 0;
     background-color: #404040;
     /* Black fallback color */
-    background-color: #404040c9;
+    background-color: #404040c6;
     /* Black w/opacity */
     overflow-x: hidden;
     /* Disable horizontal scroll */
@@ -191,30 +193,44 @@
   }
   /* Position the content inside the overlay */
 
+  .modal {
+    max-height: calc(100% - 100px);
+    position: fixed;
+      top: 50%;
+      left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    background-color: #404040c6;
+  }
+
   .overlay-content {
     position: relative;
     /* top: 5%; /* 25% from the top */
-    width: 100%;
+    /* width: 100%; */
     /* 100% width */
     text-align: left;
     /* Centered text/links */
-    margin-top: 30px;
+    margin: auto;
     /* 30px top margin to avoid conflict with the close button on smaller screens */
-    margin-left: 10px;
+    margin-left: 33%;
   }
   /* The navigation links inside the overlay */
   #overlay-geolocate {
     width: fit-content;
-    float: left;
+    /* float: left; */
+  }
+
+  p {
+    padding: 5px;
   }
 
 
-  .overlay a {
-    padding: 8px;
+  .overlay  {
+    /* padding: 8px; */
     text-decoration: none;
     font-size: 22px;
     color: #fff;
-    display: block;
+    /* display: block; */
     /* Display block instead of inline */
     transition: 0.3s;
     /* Transition effects on hover (color) */
@@ -247,19 +263,19 @@
   }
 
   #menu {
-    background: #fff;
+    /* background: #fff; */
     position: absolute;
     z-index: 3;
     top: 15px;
     right: 15px;
-    border-radius: 20px;
+    /* border-radius: 20px;
     width: 36px;
-    height: 36px;
+    height: 36px; */
     /* border: 1px solid rgba(0,0,0,0.4); */
     /* font-family: 400 15px/22px 'Poppins', 'Martel', Sans-serif; */
   }
 
-  #menu a {
+  /* #menu a {
     font-size: 13px;
     color: white;
     display: block;
@@ -287,14 +303,20 @@
 
   #menu a.active:hover {
     background: #3074a4;
-  }
+  } */
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 700px) {
     #menu {
       top: 10%;
     }
     #myNav {
-      width: 100%;
+      /* width: 100%; */
+    }
+    .overlay-content {
+      margin-left: auto;
+    }
+    .video-container {
+      margin-left: auto;
     }
   }
   /* Marker tweaks */
