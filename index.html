@@ -18,7 +18,9 @@
   <meta charset='utf-8' />
   <title>Vote Early Illinois!</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
+  <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
+
+  <!-- <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'> -->
   <!-- Mapbox GL JS -->
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
@@ -31,54 +33,53 @@
   <link href="https://fonts.googleapis.com/css?family=Martel|Poppins" rel="stylesheet">
   <link rel = "stylesheet" type = "text/css" href = "./css/site.css" />
 
+  <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
 </head>
 
-<body>
+<body onload="toggle()">
   <div class='sidebar'>
 
     <div class='heading'>
-      <h1>Early Voting Locations</h1>
-      <p style="display:inline-block;height:40px;margin:auto;">Scraped and coded with love by
+      <h2>Early Voting Locations</h2>
+      <p>Scraped and coded with love by
         <a href="https://osgisomg.com/">
           <img src="./assets/images/osgisomg.svg" alt="OSGISOMG" style="width: 100%;height: auto;max-width: 200px;padding: 5px;display: block;">
         </a>
-        <p>
+      </p>
     </div>
     <div id='listings' class='listings'></div>
 
   </div>
 
   <!-- The overlay -->
-  <div id="myNav" class="overlay" data-value="1">
+  <div id="myNav" class="overlay" data-value="0" >
 
     <!-- Button to close the overlay navigation -->
     <!-- <a href="javascript:void(0)" class="closebtn" onclick="toggle()">&times;</a> -->
 
     <!-- Overlay content -->
     <div class="overlay-content" id='overlay-content'>
-      <a style="margin:auto;"><h3 style="margin-top: 0px;margin-bottom: 0px;">Let's Get to the Polls!</h3></a>
-      <a href='#'>How to use:</a>
-      <p style="color: white;display:inline-block;">On the map, click the button to locate yourself and the nearest polls or use the search tool to search for an address.</p>
-      <div id='overlay-geocoder' class='mapboxgl-ctrl-geocoder mapboxgl-ctrl'></div>
-      <!-- <p style="color: white;margin:auto;">On the map, click this button to locate yourself and the nearest polls:</p>
-      <div class="mapboxgl-ctrl mapboxgl-ctrl-group dummy" style="width: 30px;display:inline-block;">
-        <button class="mapboxgl-ctrl-icon mapboxgl-ctrl-geolocate dummy" type="button" aria-label="Geolocate" aria-pressed="false"></button>
+      <h1>Let's Get to the Polls!</h1>
+      <h2 href='#'>How to use:</h2>
+      <!-- <p style="color: white;">On the map, click the button to locate yourself and the nearest polls or use the search tool to search for an address.</p> -->
+      <div>
+      <p style="color: white;">Use this button to locate yourself and the nearest polls:</p>
+      <div style='margin-left:8px;' id='overlay-geolocate'></div>
       </div>
-      <p style="color: white;margin:auto;">You can also use this tool to search for an address:</p>
-      <div style="display:inline-block;" class="mapboxgl-ctrl-geocoder mapboxgl-ctrl dummy"><span class="geocoder-icon geocoder-icon-search"></span>
-        <input readonly type="text" placeholder="Search">
-        </ul> -->
-      <a id='check' href="#" style="background: url(assets/images/check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
+      <p style="color: white;">You can also use this tool to search for an address:</p>
+      <div id='overlay-geocoder' style='margin-left:8px;' class='mapboxgl-ctrl-geocoder mapboxgl-ctrl'></div>
+      <a href='#' class='button fill-darken2 icon check' style='margin-left:8px;margin-top:8px;' onclick="toggle();">Got it!</a>
+      <!-- <a id='check' href="#" style="background: url(assets/images/check-circle.svg); background-repeat: no-repeat; z-index:5;background-color:white;    border-radius: 20px;
             width: 36px;display:inline-block;
-            height: 36px;" onclick="toggle();"></a>
-    </div>
+            height: 36px;" onclick="toggle();"></a> -->
 
-    <!-- <a href="#">Why does this matter?</a> -->
+
+    <h2 href="#">Why does this matter?</h2>
     <div class="video-container" id="video">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/hArkyCqBRrI?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <iframe  src="https://www.youtube.com/embed/hArkyCqBRrI?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
     </div>
-
+    </div>
   </div>
 
 
@@ -86,8 +87,10 @@
 
   </div>
   <!-- Use any element to open/show the overlay navigation menu -->
+  <!-- <a href='#' class='button fill-darken2 icon help ' onclick="toggle();">Help</a> -->
   <nav id="menu">
-    <a href="#" style="background: url(assets/images/question-circle.svg); background-repeat: no-repeat;height:100%;width:100%;" onclick="toggle()">
+    <a href='#' class='button icon help fill-darken2' onclick="toggle();">Help</a>
+
     </a>
   </nav>
 
@@ -127,31 +130,30 @@
       placeholder: "Search for Early Vote Locations"
 
     });
-    geolocate = new mapboxgl.GeolocateControl({
+    var geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true
+      },
+      fitBoundsOptions: {
+        maxZoom: 10
       },
       trackUserLocation: true
     });
 
     // map.addControl(geocoder, 'top-left');
     geocoderInit = geocoder.onAdd(map);
-    map.addControl(geolocate, 'top-left');
-    document.getElementById('overlay-geocoder').appendChild(geocoder.container);
+    geolocateInit = geolocate.onAdd(map);
 
-    // get overlay element and remove when nav is closed
-    // document.getElementById('overlay-geocoder').cloneNode(geocoder.onAdd(map));
-    // document.getElementById('overlay-geocoder').appendChild(geocoder.onAdd(map));
-    // document.getElementById('overlay-geocoder').parentNode.removeChild(document.getElementById('overlay-geocoder'));
     // This adds the data to the map
     map.on('load', function(e) {
+
       // This is where your '.addLayer()' used to be, instead add only the source without styling a layer
       map.addSource("places", {
         "type": "geojson",
         "data": polls
       });
       // Initialize the list
-      buildLocationList(polls);
+      // buildLocationList(polls);
 
 
 
@@ -177,6 +179,79 @@
           "circle-stroke-width": 3,
           "circle-stroke-color": "#fff"
         }
+      });
+
+      geolocate.on('geolocate', function(ev) {
+        var searchResult = turf.point([ev.coords.longitude, ev.coords.latitude]);
+          map.getSource('single-point').setData(searchResult);
+          if (document.getElementById("myNav").getAttribute('data-value') === "1") {
+            toggle();
+          };
+          var options = {
+            units: 'miles'
+          };
+          polls.features.forEach(function(poll) {
+            Object.defineProperty(poll.properties, 'distance', {
+              value: turf.distance(searchResult, poll.geometry, options),
+              writable: true,
+              enumerable: true,
+              configurable: true
+            });
+          });
+
+          polls.features.sort(function(a, b) {
+            if (a.properties.distance > b.properties.distance) {
+              return 1;
+            }
+            if (a.properties.distance < b.properties.distance) {
+              return -1;
+            }
+            // a must be equal to b
+            return 0;
+          });
+
+          var listings = document.getElementById('listings');
+          while (listings.firstChild) {
+            listings.removeChild(listings.firstChild);
+          }
+
+          buildLocationList(polls);
+
+          function sortLonLat(pollIdentifier) {
+            var lats = [polls.features[pollIdentifier].geometry.coordinates[1], searchResult.geometry.coordinates[1]]
+            var lons = [polls.features[pollIdentifier].geometry.coordinates[0], searchResult.geometry.coordinates[0]]
+
+            var sortedLons = lons.sort(function(a, b) {
+              if (a > b) {
+                return 1;
+              }
+              if (a.distance < b.distance) {
+                return -1;
+              }
+              return 0;
+            });
+            var sortedLats = lats.sort(function(a, b) {
+              if (a > b) {
+                return 1;
+              }
+              if (a.distance < b.distance) {
+                return -1;
+              }
+              return 0;
+            });
+
+            map.fitBounds([
+              [sortedLons[0], sortedLats[0]],
+              [sortedLons[1], sortedLats[1]]
+            ], {
+              padding: 100,
+              maxZoom: 10
+            });
+          };
+
+          sortLonLat(0);
+          createPopUp(polls.features[0]);
+  console.log(ev);
       });
 
       geocoder.on('result', function(ev) {
@@ -244,7 +319,7 @@
             [sortedLons[1], sortedLats[1]]
           ], {
             padding: 100,
-            maxZoom: 12
+            maxZoom: 10
           });
         };
 
@@ -263,7 +338,7 @@
       el.className = 'marker';
       // Add markers to the map at all points
       new mapboxgl.Marker(el, {
-          offset: [0, -23]
+          offset: [0, -23],
         })
         .setLngLat(marker.geometry.coordinates)
         .addTo(map);
@@ -293,7 +368,7 @@
     function flyToPoll(currentFeature) {
       map.flyTo({
         center: currentFeature.geometry.coordinates,
-        zoom: 7
+        zoom: 10
       });
     }
 
@@ -313,7 +388,7 @@
 
 
     function buildLocationList(data) {
-      for (i = 0; i < data.features.length; i++) {
+      for (i = 0; i < 5; i++) {
         var currentFeature = data.features[i];
         var prop = currentFeature.properties;
 
@@ -333,10 +408,10 @@
         if (prop.phone) {
           details.innerHTML += ' &middot; ' + prop.phoneFormatted;
         }
-
+        details.innerHTML = '<div> <img class="vote_icon" style="display: inline-block;" src="../assets/images/marker.svg" alt="Vote"></div>'
         if (prop.distance) {
           var roundedDistance = Math.round(prop.distance * 100) / 100;
-          details.innerHTML += '<p><strong>' + roundedDistance + ' miles away</strong></p>';
+          details.innerHTML += '<p><strong>Only ' + roundedDistance + ' miles away!</strong></p>';
         }
 
 
@@ -365,20 +440,14 @@
   <script>
     /* Open */
     function openNav() {
-      document.getElementById("myNav").style.width = "66%";
-
-
-
+      document.getElementById("myNav").style.width = "100%";
     }
 
     /* Close */
     function closeNav() {
-      document.getElementById("myNav").style.width = "0";
-      map.addControl(geocoder, 'top-left');
+      document.getElementById("myNav").style.width = "0%";
+      // map.addControl(geocoder);
       // document.getElementById('overlay-geocoder').removeChild(geocoder.container);
-
-
-
     }
 
     function toggle() {
@@ -388,15 +457,21 @@
         // map.removeControl(geocoder, 'top-left');
         geocoder._clear()
         document.getElementById('overlay-geocoder').appendChild(geocoder.container);
+        document.getElementById('overlay-geolocate').appendChild(geolocate._container);
         x.setAttribute('data-value', "1");
       } else {
         closeNav();
-        if (document.getElementById('overlay-geocoder').children[0] != null) {
+        if (document.getElementById('overlay-geocoder').children[0] != undefined) {
           document.getElementById('overlay-geocoder').removeChild(document.getElementById('overlay-geocoder').children[0]);
         };
+        document.getElementById('overlay-geolocate').removeChild(document.getElementById('overlay-geolocate').children[0]);
+        map.addControl(geocoder, 'top-left');
+        map.addControl(geolocate, 'top-left');
         x.setAttribute('data-value', "0");
       }
     }
+
+
   </script>
   <script>
     function toggleVideo(state) {
@@ -408,7 +483,6 @@
       iframe.postMessage('{"event":"command","func":"' + func + '","args":""}', '*');
     }
   </script>
-
 </body>
 
 </html>
