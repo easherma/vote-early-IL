@@ -305,9 +305,9 @@
     background: #3074a4;
   } */
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 1000px) {
     #menu {
-      top: 10%;
+      top: 6%;
     }
     #myNav {
       /* width: 100%; */
